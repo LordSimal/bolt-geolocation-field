@@ -4,16 +4,38 @@
 
   <div class="geolocation-field-wrapper">
 
+    {% set id_radio_search = id ~ '_radio_search' %}
+    {% set id_radio_latlong = id ~ '_radio_latlong' %}
+
     <div class="custom-control custom-radio custom-control-inline">
-      <input type="radio" id="{{ id }}" name="{{ name }}" value="search" class="custom-control-input">
-      <label class="custom-control-label" for="{{ id }}">Search</label>
+      <input type="radio" id="{{ id_radio_search }}" name="{{ name }}" value="search" class="custom-control-input" checked>
+      <label class="custom-control-label" for="{{ id_radio_search }}">Search</label>
     </div>
     <div class="custom-control custom-radio custom-control-inline">
-      <input type="radio" id="{{ id }}" name="{{ name }}" value="latlong" class="custom-control-input">
-      <label class="custom-control-label" for="{{ id }}">Latitude & Longitude</label>
+      <input type="radio" id="{{ id_radio_latlong }}" name="{{ name }}" value="latlong" class="custom-control-input">
+      <label class="custom-control-label" for="{{ id_radio_latlong }}">Latitude & Longitude</label>
     </div>
 
-{#    {{ dump(geolocation_settings()) }}#}
+    {% set id_input_search = id ~ '_input_search' %}
+    {% set id_input_lat = id ~ '_input_lat' %}
+    {% set id_input_long = id ~ '_input_long' %}
+
+    <div class="form-row">
+      <div class="col form-group geolocation-field-search">
+        <label for="{{ id_input_search }}">Search</label>
+        <input type="text" class="form-control" id="{{ id_input_search }}" placeholder="Search">
+      </div>
+      <div class="col form-group geolocation-field-lat d-none">
+        <label for="{{ id_input_lat }}">Latitude</label>
+        <input type="text" class="form-control" id="{{ id_input_lat }}" placeholder="Latitude">
+      </div>
+      <div class="col form-group geolocation-field-long d-none">
+        <label for="{{ id_input_long }}">Longitude</label>
+        <input type="text" class="form-control" id="{{ id_input_long }}" placeholder="Longitude">
+      </div>
+    </div>
+
+    {#    {{ dump(geolocation_settings()) }}#}
   </div>
 
 {% endblock %}
