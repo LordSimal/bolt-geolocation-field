@@ -93,8 +93,9 @@
           gmap_url = basic_gmap_url.replace('$QUERY$', query);
         }
 
-        let zoom = $('.js-geolocation-zoom').val();
+        let zoom = $wrapper.find('.js-geolocation-zoom').val();
         gmap_url = gmap_url.replace('$ZOOM$', zoom);
+        $wrapper.find('.geolocation-field-wrapper__gmap-wrapper').removeClass('d-none');
         $wrapper.find('.js-gmap').attr('src', encodeURI(gmap_url));
 
         // Update hidden input

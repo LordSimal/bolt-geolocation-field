@@ -30,19 +30,19 @@
     {% set id_input_long = id ~ '_input_long' %}
 
     <div class="form-row">
-      <div class="col form-group geolocation-field-search{% if parsed_value.selected == "latlong" %} d-none {% endif %}">
+      <div class="col form-group geolocation-field-search{% if parsed_value.selected == "latlong" or parsed_value.selected == "latlong" is not defined %} d-none {% endif %}">
         <label for="{{ id_input_search }}">Search</label>
         <input type="text" class="form-control" id="{{ id_input_search }}"
                placeholder="Search" value="{{ parsed_value.search }}"
         >
       </div>
-      <div class="col form-group geolocation-field-lat{% if parsed_value.selected == "search" %} d-none {% endif %}">
+      <div class="col form-group geolocation-field-lat{% if parsed_value.selected == "search" or parsed_value.selected == "search" is not defined %} d-none {% endif %}">
         <label for="{{ id_input_lat }}">Latitude</label>
         <input type="text" class="form-control" id="{{ id_input_lat }}"
                placeholder="Latitude" value="{{ parsed_value.lat }}"
         >
       </div>
-      <div class="col form-group geolocation-field-long{% if parsed_value.selected == "search" %} d-none {% endif %}">
+      <div class="col form-group geolocation-field-long{% if parsed_value.selected == "search" or parsed_value.selected == "search" is not defined %} d-none {% endif %}">
         <label for="{{ id_input_long }}">Longitude</label>
         <input type="text" class="form-control" id="{{ id_input_long }}"
                placeholder="Longitude" value="{{ parsed_value.long }}"
@@ -58,7 +58,7 @@
     {# If values are already saved, build the Google Map Query #}
     {% if parsed_value.selected == "search" %}
       {% set gmap_query = parsed_value.search|url_encode %}
-    {% else %}
+    {% elseif parsed_value.selected == "latlong" %}
       {% set gmap_query = parsed_value.lat ~ ',' ~ parsed_value.long|url_encode %}
     {% endif %}
 
@@ -70,9 +70,13 @@
 
     <input type="hidden" class="js-geolocation-zoom" value="{{ zoom }}"/>
 
-    <div class="geolocation-field-wrapper__gmap-wrapper">
+    <div class="geolocation-field-wrapper__gmap-wrapper{% if gmap_query is not defined %} d-none {% endif %}">
       <iframe class="js-gmap"
-              src="https://maps.google.com/maps?q={{ gmap_query }}&t=&z={{ zoom }}&ie=UTF8&iwloc=&output=embed"
+              src="
+              {% if gmap_query is defined %}
+                https://maps.google.com/maps?q={{ gmap_query }}&t=&z={{ zoom }}&ie=UTF8&iwloc=&output=embed
+              {% endif %}
+              "
               frameborder="0" scrolling="no" marginheight="0" marginwidth="0">
       </iframe>
     </div>

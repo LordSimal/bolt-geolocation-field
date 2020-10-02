@@ -50,6 +50,16 @@ class TwigExtension extends AbstractExtension
 
     public function geolocationDecodeJson($str): object
     {
-        return json_decode($str);
+        if($str == null){
+            return (object)[
+                'selected' => null,
+                'search' => null,
+                'lat' => null,
+                'long' => null,
+                'zoom' => null
+            ];
+        }
+
+        return Json::json_decode($str);
     }
 }
