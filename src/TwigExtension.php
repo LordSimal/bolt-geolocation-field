@@ -31,14 +31,15 @@ class TwigExtension extends AbstractExtension
         ];
 
         return [
-            new TwigFunction('geolocation_settings', [$this, 'geolocationSettings'], $safe)
+            new TwigFunction('geolocation_settings', [$this, 'geolocationSettings'], $safe),
         ];
     }
 
-    public function getFilters() {
-      return array(
-        'geolocation_decode_json'   => new TwigFilter('geolocation_decode_json', [$this, 'geolocationDecodeJson']),
-      );
+    public function getFilters()
+    {
+        return [
+            'geolocation_decode_json' => new TwigFilter('geolocation_decode_json', [$this, 'geolocationDecodeJson']),
+        ];
     }
 
     public function geolocationSettings(): string
@@ -50,13 +51,13 @@ class TwigExtension extends AbstractExtension
 
     public function geolocationDecodeJson($str): object
     {
-        if($str == null){
-            return (object)[
+        if ($str === null) {
+            return (object) [
                 'selected' => null,
                 'search' => null,
                 'lat' => null,
                 'long' => null,
-                'zoom' => null
+                'zoom' => null,
             ];
         }
 

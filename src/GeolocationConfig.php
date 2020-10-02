@@ -25,7 +25,6 @@ class GeolocationConfig
      * Called by TwigExtension.php to
      * - merge default configs from bellow with the users custom config and
      * - pass them into the backend template
-     * @return array
      */
     public function getConfig(): array
     {
@@ -36,9 +35,8 @@ class GeolocationConfig
 
     /**
      * Default configs which should always be present.
-     * @return array
      */
-    public function getDefaults()
+    public function getDefaults(): array
     {
         return [
             '_csrf_token' => $this->csrfTokenManager->getToken('bolt_geolocation')

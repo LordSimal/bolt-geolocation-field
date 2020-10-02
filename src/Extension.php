@@ -11,7 +11,6 @@ class Extension extends BaseExtension
 {
     /**
      * The name of the extension in the backend (/bolt/extensions)
-     * @return string
      */
     public function getName(): string
     {
