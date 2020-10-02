@@ -6,6 +6,7 @@ namespace Bolt\Geolocation;
 
 use Bolt\Common\Json;
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 class TwigExtension extends AbstractExtension
@@ -30,8 +31,14 @@ class TwigExtension extends AbstractExtension
         ];
 
         return [
-            new TwigFunction('geolocation_settings', [$this, 'geolocationSettings'], $safe),
+            new TwigFunction('geolocation_settings', [$this, 'geolocationSettings'], $safe)
         ];
+    }
+
+    public function getFilters() {
+      return array(
+        'geolocation_decode_json'   => new TwigFilter('geolocation_decode_json', [$this, 'geolocationDecodeJson']),
+      );
     }
 
     public function geolocationSettings(): string
@@ -39,5 +46,10 @@ class TwigExtension extends AbstractExtension
         $settings = $this->geolocationConfig->getConfig();
 
         return Json::json_encode($settings, JSON_HEX_QUOT | JSON_HEX_APOS);
+    }
+
+    public function geolocationDecodeJson($str): object
+    {
+        return json_decode($str);
     }
 }
