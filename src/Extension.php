@@ -21,6 +21,9 @@ class Extension extends BaseExtension
     public function initialize(): void
     {
         $this->addTwigNamespace('geolocation');
+
+        // This Injector Widget is used to insert CSS and JS for a field type
+        // Therefore it is only inserted once even if you have multiple fields of this field type
         $this->addWidget(new GeolocationInjectorWidget());
     }
 
