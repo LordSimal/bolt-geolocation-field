@@ -12,15 +12,15 @@
 
     <div class="custom-control custom-radio custom-control-inline geolocation-radio-search">
       <input type="radio" id="{{ id_radio_search }}" name="{{ id_radio_name }}"
-             value="search" class="custom-control-input" selected
-             {% if parsed_value.selected == "search" %} checked {% endif %}
+             value="search" class="custom-control-input"
+        {% if parsed_value.selected == "search" %} checked {% endif %}
       >
       <label class="custom-control-label" for="{{ id_radio_search }}">Search</label>
     </div>
     <div class="custom-control custom-radio custom-control-inline geolocation-radio-latlong">
       <input type="radio" id="{{ id_radio_latlong }}" name="{{ id_radio_name }}"
              value="latlong" class="custom-control-input"
-             {% if parsed_value.selected == "latlong" %} checked {% endif %}
+        {% if parsed_value.selected == "latlong" %} checked {% endif %}
       >
       <label class="custom-control-label" for="{{ id_radio_latlong }}">Latitude & Longitude</label>
     </div>
@@ -49,8 +49,33 @@
         >
       </div>
     </div>
+    <button type="button" class="btn btn-primary js-update-gmap">Update Google Map</button>
+    <button type="button" class="btn btn-primary js-zoom-gmap-in">Zoom in</button>
+    <button type="button" class="btn btn-primary js-zoom-gmap-out">Zoom out</button>
 
-    <input class="js-geolocation-val" type="hidden" name="{{ name }}" value="{{ value }}"/>
+    <input type="hidden" class="js-geolocation-val" name="{{ name }}" value="{{ value }}"/>
+
+    {# If values are already saved, build the Google Map Query #}
+    {% if parsed_value.selected == "search" %}
+      {% set gmap_query = parsed_value.search|url_encode %}
+    {% else %}
+      {% set gmap_query = parsed_value.lat ~ ',' ~ parsed_value.long|url_encode %}
+    {% endif %}
+
+    {% if(parsed_value.zoom is not defined) %}
+      {% set zoom = 13 %}
+    {% else %}
+      {% set zoom = parsed_value.zoom %}
+    {% endif %}
+
+    <input type="hidden" class="js-geolocation-zoom" value="{{ zoom }}"/>
+
+    <div class="geolocation-field-wrapper__gmap-wrapper">
+      <iframe class="js-gmap"
+              src="https://maps.google.com/maps?q={{ gmap_query }}&t=&z={{ zoom }}&ie=UTF8&iwloc=&output=embed"
+              frameborder="0" scrolling="no" marginheight="0" marginwidth="0">
+      </iframe>
+    </div>
 
     {#    {{ dump(geolocation_settings()) }}#}
   </div>

@@ -1,0 +1,9 @@
+.geolocation-field-wrapper__gmap-wrapper {
+  height: 400px;
+  margin-top: 1rem;
+}
+
+.geolocation-field-wrapper__gmap-wrapper iframe {
+  width: 100%;
+  height: 100%;
+}
