@@ -18,6 +18,11 @@ class TwigExtension extends AbstractExtension
         $this->geolocationConfig = $geolocationConfig;
     }
 
+    /**
+     * This functions create a custom TWIG function `geolocation_settings()`
+     *
+     * @return TwigFunction[]
+     */
     public function getFunctions(): array
     {
         $safe = [

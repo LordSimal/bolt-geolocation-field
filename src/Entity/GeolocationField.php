@@ -15,6 +15,7 @@ use Twig\Markup;
  */
 class GeolocationField extends Field implements Excerptable, FieldInterface
 {
+    // This defines the name of the type used in the contenttypes.yaml field
     public const TYPE = 'geolocation';
 
     /**

@@ -21,6 +21,12 @@ class GeolocationConfig
         $this->csrfTokenManager = $csrfTokenManager;
     }
 
+    /**
+     * Called by TwigExtension.php to
+     * - merge default configs from bellow with the users custom config and
+     * - pass them into the backend template
+     * @return array
+     */
     public function getConfig(): array
     {
         $extension = $this->registry->getExtension(Extension::class);
@@ -28,6 +34,10 @@ class GeolocationConfig
         return array_merge($this->getDefaults(), $extension->getConfig()['default']);
     }
 
+    /**
+     * Default configs which should always be present.
+     * @return array
+     */
     public function getDefaults()
     {
         return [
