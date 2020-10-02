@@ -1,0 +1,19 @@
+{% extends '@bolt/_partials/fields/_base.html.twig' %}
+
+{% block field %}
+
+  {#
+    Default TWIG variables
+    Field Name: {{ name }}
+    Field ID: {{ id }}
+    Field Value: {{ value }}
+  #}
+
+  {#  <script src="{{ asset('assets/geolocation/geolocation.js', 'public') }}"></script>#}
+  {#  <link rel="stylesheet" href="{{ asset('assets/geolocation/geolocation.css', 'public') }}">#}
+
+  <textarea type="text" name="{{ name }}" id="{{ id }}" value="{{ value }}"></textarea>
+
+  {{ dump(geolocation_settings()) }}
+
+{% endblock %}

@@ -1,0 +1,4 @@
+# Settings for Bolt Geolocation Field
+
+default:
+  apikey: "<my-api-key>"
