@@ -51,7 +51,7 @@ class TwigExtension extends AbstractExtension
 
     public function geolocationDecodeJson($str): object
     {
-        if ($str === null) {
+        if (empty($str)) {
             return (object) [
                 'selected' => null,
                 'search' => null,
