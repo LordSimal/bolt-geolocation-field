@@ -30,28 +30,39 @@
     {% set id_input_long = id ~ '_input_long' %}
 
     <div class="form-row">
-      <div class="col form-group geolocation-field-search{% if parsed_value.selected == "latlong" or parsed_value.selected == "latlong" is not defined %} d-none {% endif %}">
+      <div class="col form-group geolocation-field-search{% if parsed_value.selected == "latlong" or parsed_value.selected is null %} d-none {% endif %}">
         <label for="{{ id_input_search }}">Search</label>
         <input type="text" class="form-control" id="{{ id_input_search }}"
                placeholder="Search" value="{{ parsed_value.search }}"
         >
       </div>
-      <div class="col form-group geolocation-field-lat{% if parsed_value.selected == "search" or parsed_value.selected == "search" is not defined %} d-none {% endif %}">
+      <div class="col form-group geolocation-field-lat{% if parsed_value.selected == "search" or parsed_value.selected is null %} d-none {% endif %}">
         <label for="{{ id_input_lat }}">Latitude</label>
         <input type="text" class="form-control" id="{{ id_input_lat }}"
                placeholder="Latitude" value="{{ parsed_value.lat }}"
         >
       </div>
-      <div class="col form-group geolocation-field-long{% if parsed_value.selected == "search" or parsed_value.selected == "search" is not defined %} d-none {% endif %}">
+      <div class="col form-group geolocation-field-long{% if parsed_value.selected == "search" or parsed_value.selected is null %} d-none {% endif %}">
         <label for="{{ id_input_long }}">Longitude</label>
         <input type="text" class="form-control" id="{{ id_input_long }}"
                placeholder="Longitude" value="{{ parsed_value.long }}"
         >
       </div>
     </div>
-    <button type="button" class="btn btn-primary js-update-gmap">Update Google Map</button>
-    <button type="button" class="btn btn-primary js-zoom-gmap-in">Zoom in</button>
-    <button type="button" class="btn btn-primary js-zoom-gmap-out">Zoom out</button>
+
+    {% set update_gmap_btn_class = '' %}
+    {% if parsed_value.selected == "search" or parsed_value.selected is null %}
+      {% set update_gmap_btn_class = 'd-none' %}
+    {% endif %}
+
+    {% set zoom_btn_class = '' %}
+    {% if parsed_value.selected is null %}
+      {% set zoom_btn_class = 'd-none' %}
+    {% endif %}
+
+    <button type="button" class="btn btn-primary js-update-gmap {{ update_gmap_btn_class }}">Update Google Map</button>
+    <button type="button" class="btn btn-secondary js-zoom-gmap-in {{ zoom_btn_class }}">Zoom in</button>
+    <button type="button" class="btn btn-secondary js-zoom-gmap-out {{ zoom_btn_class }}">Zoom out</button>
 
     <input type="hidden" class="js-geolocation-val" name="{{ name }}" value="{{ value }}"/>
 
@@ -68,17 +79,20 @@
       {% set zoom = parsed_value.zoom %}
     {% endif %}
 
+    {% if zoom is null %}
+      {% set zoom = 13 %}
+    {% endif %}
+
     <input type="hidden" class="js-geolocation-zoom" value="{{ zoom }}"/>
 
     <div class="geolocation-field-wrapper__gmap-wrapper{% if gmap_query is not defined %} d-none {% endif %}">
-      <iframe class="js-gmap"
-              src="
-              {% if gmap_query is defined %}
-                https://maps.google.com/maps?q={{ gmap_query }}&t=&z={{ zoom }}&ie=UTF8&iwloc=&output=embed
-              {% endif %}
-              "
-              frameborder="0" scrolling="no" marginheight="0" marginwidth="0">
-      </iframe>
+      <div class="geolocation-field-wrapper__gmap"
+           data-selected="{{ parsed_value.selected }}"
+           data-search="{{ parsed_value.search }}"
+           data-lat="{{ parsed_value.lat }}"
+           data-long="{{ parsed_value.long }}"
+           data-zoom="{{ zoom }}"
+      ></div>
     </div>
 
     {#    {{ dump(geolocation_settings()) }}#}
