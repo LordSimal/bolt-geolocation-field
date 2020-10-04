@@ -105,6 +105,86 @@ And since there is (as far as I know) no Map Provider out there, which allows
 multiple embeded Maps without an API key I have chosen the most popular one.
 
 
+## Accessing the values in the frontend
+
+Basically everything in the filed is saved inside a JSON.
+
+BoltCMS returns that JSON as a string, therefore we have to decode it first.
+
+```
+{% set field_value = record.location %}
+
+{% if field_value == "" %}
+  The given field value for <code>{{ record.location.name }}</code> is empty
+{% else %}
+  {% set location_json = record.location|json_decode() %}
+
+  <div>Selected: {{ location_json.selected }}</div>
+  <div>Zoom: {{ location_json.zoom }}</div>
+  <div>Search: {{ location_json.search }}</div>
+  <div>Latitude: {{ location_json.lat }}</div>
+  <div>Longitude: {{ location_json.long }}</div>
+{% endif %}
+```
+
+* **Record** here is the current entry for the content type.
+* **location** is the name you have given the filed in the contenttypes.yaml
+
+
+* **location_json.selected** is either **search** or **latlong**
+* **location_json.zoom** is a value between 0 and 19
+* **location_json.search** is the searchterm aka the searched location
+* **location_json.lat** is the latitude value
+* **location_json.long** is the longitude value
+
+
+### Outputting a simple embedded map with an iframe
+
+If you don't want to output the map yourself with the Google Map JS API 
+you can use the data from above to output an embedded map via an `iframe`
+
+```
+{% set field_value = record.location %}
+
+{% if field_value == "" %}
+  The given field value for <code>{{ record.location.name }}</code> is empty
+{% else %}
+  {% set location_json = record.location|json_decode() %}
+
+  {% if location_json.selected == "search" %}
+    {% set gmap_query = location_json.search|url_encode %}
+  {% elseif location_json.selected == "latlong" %}
+    {% set gmap_query = location_json.lat ~ ',' ~ location_json.long %}
+  {% endif %}
+  
+  <div class="geolocation-field-iframe-wrapper">
+    <iframe class="geolocation-field-iframe"
+            src="https://maps.google.com/maps?q={{ gmap_query }}&t=&z={{ location_json.zoom }}&ie=UTF8&iwloc=&output=embed"
+            frameborder="0" scrolling="no" marginheight="0" marginwidth="0">
+    </iframe>
+  </div>
+{% endif %}
+```
+
+I would recommend to you to set the following CSS in your application as well:
+
+```css
+.geolocation-field-iframe {
+    height: 500px; /* or what height you need */
+    width: 100%;
+}
+.geolocation-field-iframe {
+    height: 100%;
+    width: 100%;
+}
+```
+
+> **WARNING**: Google only allows 1 iFrame per URL. See https://stackoverflow.com/questions/15388897/google-maps-inside-iframe-not-loading
+
+Therefore if you need to output multiple maps on one page you will need 
+to implement the Google Maps JS API for yourself in your frontend.
+
+
 ## Running PHPStan and Easy Codings Standard
 
 First, make sure dependencies are installed:
