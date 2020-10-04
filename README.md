@@ -114,8 +114,8 @@ BoltCMS returns that JSON as a string, therefore we have to decode it first.
 ```
 {% set field_value = record.location %}
 
-{% if field_value == "" %}
-  The given field value for <code>{{ record.location.name }}</code> is empty
+{% if field_value is not json %}
+  The given field value for <code>{{ record.location.name }}</code> is not a valid json
 {% else %}
   {% set location_json = record.location|json_decode() %}
 
@@ -146,8 +146,8 @@ you can use the data from above to output an embedded map via an `iframe`
 ```
 {% set field_value = record.location %}
 
-{% if field_value == "" %}
-  The given field value for <code>{{ record.location.name }}</code> is empty
+{% if field_value is not json %}
+  The given field value for <code>{{ record.location.name }}</code> is not a valid json
 {% else %}
   {% set location_json = record.location|json_decode() %}
 
