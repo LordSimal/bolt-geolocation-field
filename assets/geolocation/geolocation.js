@@ -289,6 +289,29 @@ GEOLOCATION.Field = ( function( $ ) {
 
   }
 
+  // Geocode
+  Field.prototype.geocodeLatLng = function(lat, lng) {
+    const geocoder = new google.maps.Geocoder();
+    const latlng = {
+      lat,
+      lng,
+    };
+
+    return new Promise(function(resolve, reject) {
+      geocoder.geocode({ location: latlng }, function(results, status) {
+        if (status === "OK") {
+          if (results[0]) {
+            resolve(results[0]);
+          } else {
+            reject();
+          }
+        } else {
+          reject();
+        }
+      })
+    })
+  }
+
   // exports
   return Field;
 }( $ ) );
