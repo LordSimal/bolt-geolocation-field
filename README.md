@@ -39,6 +39,17 @@ test:
     icon_one: "fa:home"
 ```
 
+Field can have autocompleteOptions key in order to set componentRestrictions for exemple
+
+```
+location:
+    type: geolocation
+    autocompleteOptions:
+        componentRestrictions:
+            country: 'us'
+```
+To see all options avalible, please refer you to [google documentation](https://developers.google.com/maps/documentation/javascript/geocoding#ComponentFiltering) 
+
 With that you can see the field in the backend:
 
 ![Backend Field](screenshots/backend-field-empty.png)

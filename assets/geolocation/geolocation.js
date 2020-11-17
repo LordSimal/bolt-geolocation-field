@@ -134,7 +134,33 @@ GEOLOCATION.Field = ( function( $ ) {
       let hidden_input_val = that.get_hidden_input_val();
       hidden_input_val.zoom = zoom;
 
-      that.$hidden_input.val( JSON.stringify( hidden_input_val ) );
+      // Geocoder
+      that.geocodeLatLng(parseFloat(hidden_input_val.lat), parseFloat(hidden_input_val.long))
+          .then((place) => {
+            hidden_input_val.zipCode = null;
+            hidden_input_val.city = null;
+            hidden_input_val.country = null;
+            for(const component of place.address_components) {
+              if(component.types.includes('postal_code')) {
+                hidden_input_val.zipCode = component.long_name;
+              }
+              if(component.types.includes('locality')) {
+                hidden_input_val.city = component.long_name;
+              }
+              if(component.types.includes('country')) {
+                hidden_input_val.country = component.long_name;
+              }
+            }
+            that.$hidden_input.val( JSON.stringify( hidden_input_val ) );
+          })
+          .catch((err) => {
+            hidden_input_val.zipCode = null;
+            hidden_input_val.city = null;
+            hidden_input_val.country = null;
+            that.$hidden_input.val( JSON.stringify( hidden_input_val ) );
+          })
+      ;
+
       that.updateGMapLatLong();
     } );
 
@@ -175,10 +201,12 @@ GEOLOCATION.Field = ( function( $ ) {
       zoom: 13,
     } );
 
+    const autocompleteOptions = JSON.parse(that.$hidden_input[0].dataset.autocompleteOptions);
+
     const input = that.$wrapper.find( '.geolocation-field-search > input' )[0];
-    const autocomplete = new google.maps.places.Autocomplete( input );
+    const autocomplete = new google.maps.places.Autocomplete( input, autocompleteOptions );
     // Set the data fields to return when the user selects a place.
-    autocomplete.setFields( ["geometry", "name", "formatted_address"] );
+    autocomplete.setFields( ["geometry", "name", "formatted_address", "address_components"] );
     autocomplete.addListener( "place_changed", () => {
       const place = autocomplete.getPlace();
 
@@ -205,6 +233,22 @@ GEOLOCATION.Field = ( function( $ ) {
       hidden_input_val.search = place.formatted_address;
       hidden_input_val.lat = place.geometry.location.lat();
       hidden_input_val.long = place.geometry.location.lng();
+      hidden_input_val.zipCode = null;
+      hidden_input_val.city = null;
+      hidden_input_val.country = null;
+
+      for(const component of place.address_components) {
+        if(component.types.includes('postal_code')) {
+          hidden_input_val.zipCode = component.long_name;
+        }
+        if(component.types.includes('locality')) {
+          hidden_input_val.city = component.long_name;
+        }
+        if(component.types.includes('country')) {
+          hidden_input_val.country = component.long_name;
+        }
+      }
+
       that.$hidden_input.val( JSON.stringify( hidden_input_val ) );
     } );
   }
@@ -243,6 +287,29 @@ GEOLOCATION.Field = ( function( $ ) {
       } );
     }
 
+  }
+
+  // Geocode
+  Field.prototype.geocodeLatLng = function(lat, lng) {
+    const geocoder = new google.maps.Geocoder();
+    const latlng = {
+      lat,
+      lng,
+    };
+
+    return new Promise(function(resolve, reject) {
+      geocoder.geocode({ location: latlng }, function(results, status) {
+        if (status === "OK") {
+          if (results[0]) {
+            resolve(results[0]);
+          } else {
+            reject();
+          }
+        } else {
+          reject();
+        }
+      })
+    })
   }
 
   // exports
