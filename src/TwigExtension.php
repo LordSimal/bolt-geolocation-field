@@ -58,6 +58,8 @@ class TwigExtension extends AbstractExtension
                 'lat' => null,
                 'long' => null,
                 'zoom' => null,
+                'zipCode' => null,
+                'city' => null
             ];
         }
 
