@@ -64,7 +64,8 @@
     <button type="button" class="btn btn-secondary js-zoom-gmap-in {{ zoom_btn_class }}">Zoom in</button>
     <button type="button" class="btn btn-secondary js-zoom-gmap-out {{ zoom_btn_class }}">Zoom out</button>
 
-    <input type="hidden" class="js-geolocation-val" name="{{ name }}" value="{{ value }}"/>
+    {% set restrictions = field.definition.has('autocompleteOptions') ? field.definition.get('autocompleteOptions') : [] %}
+    <input type="hidden" data-autocomplete-options="{{ restrictions|json_encode }}" class="js-geolocation-val" name="{{ name }}" value="{{ value }}"/>
 
     {# If values are already saved, build the Google Map Query #}
     {% if parsed_value.selected == "search" %}
@@ -97,5 +98,4 @@
 
     {#    {{ dump(geolocation_settings()) }}#}
   </div>
-
 {% endblock %}

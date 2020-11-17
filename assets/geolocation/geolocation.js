@@ -175,8 +175,10 @@ GEOLOCATION.Field = ( function( $ ) {
       zoom: 13,
     } );
 
+    const autocompleteOptions = JSON.parse(that.$hidden_input[0].dataset.autocompleteOptions);
+
     const input = that.$wrapper.find( '.geolocation-field-search > input' )[0];
-    const autocomplete = new google.maps.places.Autocomplete( input );
+    const autocomplete = new google.maps.places.Autocomplete( input, autocompleteOptions );
     // Set the data fields to return when the user selects a place.
     autocomplete.setFields( ["geometry", "name", "formatted_address", "address_components"] );
     autocomplete.addListener( "place_changed", () => {
