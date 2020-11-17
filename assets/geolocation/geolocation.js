@@ -134,7 +134,33 @@ GEOLOCATION.Field = ( function( $ ) {
       let hidden_input_val = that.get_hidden_input_val();
       hidden_input_val.zoom = zoom;
 
-      that.$hidden_input.val( JSON.stringify( hidden_input_val ) );
+      // Geocoder
+      that.geocodeLatLng(parseFloat(hidden_input_val.lat), parseFloat(hidden_input_val.long))
+          .then((place) => {
+            hidden_input_val.zipCode = null;
+            hidden_input_val.city = null;
+            hidden_input_val.country = null;
+            for(const component of place.address_components) {
+              if(component.types.includes('postal_code')) {
+                hidden_input_val.zipCode = component.long_name;
+              }
+              if(component.types.includes('locality')) {
+                hidden_input_val.city = component.long_name;
+              }
+              if(component.types.includes('country')) {
+                hidden_input_val.country = component.long_name;
+              }
+            }
+            that.$hidden_input.val( JSON.stringify( hidden_input_val ) );
+          })
+          .catch((err) => {
+            hidden_input_val.zipCode = null;
+            hidden_input_val.city = null;
+            hidden_input_val.country = null;
+            that.$hidden_input.val( JSON.stringify( hidden_input_val ) );
+          })
+      ;
+
       that.updateGMapLatLong();
     } );
 
