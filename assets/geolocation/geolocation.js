@@ -207,7 +207,7 @@ GEOLOCATION.Field = ( function( $ ) {
     const autocomplete = new google.maps.places.Autocomplete( input, autocompleteOptions );
 
     // Prevent enter key press
-    autocomplete.addEventListener('keypress', function(e){
+    input.addEventListener('keypress', function(e){
       if (e.keyCode == 13) {
         e.preventDefault();
         return false;
