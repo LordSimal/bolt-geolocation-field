@@ -205,6 +205,15 @@ GEOLOCATION.Field = ( function( $ ) {
 
     const input = that.$wrapper.find( '.geolocation-field-search > input' )[0];
     const autocomplete = new google.maps.places.Autocomplete( input, autocompleteOptions );
+
+    // Prevent enter key press
+    autocomplete.addEventListener('keypress', function(e){
+      if (e.keyCode == 13) {
+        e.preventDefault();
+        return false;
+      }
+    });
+
     // Set the data fields to return when the user selects a place.
     autocomplete.setFields( ["geometry", "name", "formatted_address", "address_components"] );
     autocomplete.addListener( "place_changed", () => {
