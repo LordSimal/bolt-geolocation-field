@@ -1,5 +1,14 @@
 # 📝 Bolt Geolocation Field Extension
 
+<p align="center">
+    <a href="https://packagist.org/packages/LordSimal/bolt-geolocation-field" target="_blank">
+        <img alt="Total Downloads" src="https://img.shields.io/packagist/dt/LordSimal/bolt-geolocation-field.svg?style=flat-square">
+    </a>
+    <a href="https://packagist.org/packages/LordSimal/bolt-geolocation-field" target="_blank">
+        <img alt="Latest Stable Version" src="https://img.shields.io/packagist/v/LordSimal/bolt-geolocation-field.svg?style=flat-square&label=stable">
+    </a>
+</p>
+
 **This Extension was written for BoltCMS 4**
 
 This extension allows you to use fields of `type: geolocation` in your 
