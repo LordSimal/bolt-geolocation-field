@@ -33,19 +33,19 @@
       <div class="col form-group geolocation-field-search{% if parsed_value.selected == "latlong" or parsed_value.selected is null %} d-none {% endif %}">
         <label for="{{ id_input_search }}">Search</label>
         <input type="text" class="form-control" id="{{ id_input_search }}"
-               placeholder="Search" value="{{ parsed_value.search }}"
+               placeholder="Search" value="{{ parsed_value.search|default() }}"
         >
       </div>
       <div class="col form-group geolocation-field-lat{% if parsed_value.selected == "search" or parsed_value.selected is null %} d-none {% endif %}">
         <label for="{{ id_input_lat }}">Latitude</label>
         <input type="text" class="form-control" id="{{ id_input_lat }}"
-               placeholder="Latitude" value="{{ parsed_value.lat is defined ? parsed_value.lat : '' }}"
+               placeholder="Latitude" value="{{ parsed_value.lat|default() }}"
         >
       </div>
       <div class="col form-group geolocation-field-long{% if parsed_value.selected == "search" or parsed_value.selected is null %} d-none {% endif %}">
         <label for="{{ id_input_long }}">Longitude</label>
         <input type="text" class="form-control" id="{{ id_input_long }}"
-               placeholder="Longitude" value="{{ parsed_value.long is defined ? parsed_value.long : '' }}"
+               placeholder="Longitude" value="{{ parsed_value.long|default() }}"
         >
       </div>
     </div>
@@ -70,7 +70,7 @@
     {# If values are already saved, build the Google Map Query #}
     {% if parsed_value.selected == "search" %}
       {% set gmap_query = parsed_value.search|url_encode %}
-    {% elseif parsed_value.selected == "latlong" and parsed_value.lat is defined and parsed_value.long is defined %}
+    {% elseif parsed_value.selected == "latlong" and parsed_value.lat|default() and parsed_value.long|default() %}
       {% set gmap_query = parsed_value.lat ~ ',' ~ parsed_value.long|url_encode %}
     {% endif %}
 
@@ -89,9 +89,9 @@
     <div class="geolocation-field-wrapper__gmap-wrapper{% if gmap_query is not defined %} d-none {% endif %}">
       <div class="geolocation-field-wrapper__gmap"
            data-selected="{{ parsed_value.selected }}"
-           data-search="{{ parsed_value.search }}"
-           data-lat="{{ parsed_value.lat is defined ? parsed_value.lat : '' }}"
-           data-long="{{ parsed_value.long is defined ? parsed_value.long : '' }}"
+           data-search="{{ parsed_value.search|default() }}"
+           data-lat="{{ parsed_value.lat|default() }}"
+           data-long="{{ parsed_value.long|default() }}"
            data-zoom="{{ zoom }}"
       ></div>
     </div>
