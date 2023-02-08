@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bolt\Geolocation;
 
 use Bolt\Extension\ExtensionRegistry;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 class GeolocationConfig
@@ -15,10 +16,14 @@ class GeolocationConfig
     /** @var CsrfTokenManagerInterface */
     private $csrfTokenManager;
 
-    public function __construct(ExtensionRegistry $registry, CsrfTokenManagerInterface $csrfTokenManager)
+    /** @var ParameterBagInterface */
+    private $parameterBag;
+
+    public function __construct(ExtensionRegistry $registry, CsrfTokenManagerInterface $csrfTokenManager, ParameterBagInterface $parameterBag)
     {
         $this->registry = $registry;
         $this->csrfTokenManager = $csrfTokenManager;
+        $this->parameterBag = $parameterBag;
     }
 
     /**
@@ -29,8 +34,10 @@ class GeolocationConfig
     public function getConfig(): array
     {
         $extension = $this->registry->getExtension(Extension::class);
+        $config = $extension->getConfig()['default'];
+        $resolvedConfig = $this->parameterBag->resolveValue($config);
 
-        return array_merge($this->getDefaults(), $extension->getConfig()['default']);
+        return array_merge($this->getDefaults(), $resolvedConfig);
     }
 
     /**
