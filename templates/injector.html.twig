@@ -4,6 +4,6 @@
 {% set config = geolocation_settings() | geolocation_decode_json %}
 
 <script
-  src="https://maps.googleapis.com/maps/api/js?key={{ config.apikey }}&callback=gmapCallback&libraries=places&v=weekly"
+  src="https://maps.googleapis.com/maps/api/js?key={{ config.apikey }}&language={{ config.locale }}&callback=gmapCallback&libraries=places&v=weekly"
   defer
 ></script>
