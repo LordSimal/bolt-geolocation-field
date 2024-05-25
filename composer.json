@@ -27,9 +27,6 @@
     "entrypoint": "Bolt\\Geolocation\\Extension",
     "screenshots": [
       "screenshots/backend-zoom.gif"
-    ],
-    "branch-alias": {
-      "dev-master": "1.x-dev"
-    }
+    ]
   }
 }
