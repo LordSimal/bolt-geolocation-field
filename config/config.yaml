@@ -1,4 +1,4 @@
 # Settings for Bolt Geolocation Field
 default:
     apikey: "<my-api-key>" # or use '%bolt.google_maps_key%' (the google_maps_key parameter needs to be added to the config.yaml)
-    language: '%locale%'
+    locale: '%locale%'
